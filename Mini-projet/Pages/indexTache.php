@@ -14,7 +14,7 @@
                 <option value="">Tous les statuts</option>
                 <option value="a faire" <?= (($_GET['statut'] ?? '') == 'a faire') ? 'selected' : '' ?>>A faire</option>
                 <option value="en cours" <?= (($_GET['statut'] ?? '') == 'en cours') ? 'selected' : '' ?>>En cours</option>
-                <option value="terminer" <?= (($_GET['statut'] ?? '') == 'terminer') ? 'selected' : '' ?>>Terminer</option>
+                <option value="terminée" <?= (($_GET['statut'] ?? '') == 'terminer') ? 'selected' : '' ?>>Terminer</option>
             </select>
         </div>
 
