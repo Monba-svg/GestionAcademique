@@ -1,6 +1,6 @@
 <?php 
 include "db.php";
-   
+
 // 1. MODIFIER
 if (isset($_POST['action']) && $_POST['action'] === 'modifier') {
 
@@ -91,7 +91,10 @@ if (!empty($conditions)) {
 }
 
 $stmt = $pdo->query($sql);
-$taches = $stmt->fetchAll();
+$taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$json = "tache.json";
+file_put_contents($json, json_encode($taches, JSON_PRETTY_PRINT));
 
 
 ?>
