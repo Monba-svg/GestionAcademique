@@ -1,4 +1,4 @@
-   <h1 class="text-center mb-5 mt-5">Ajouter des tâches</h1>
+   <h1 class="text-center mb-5 mt-5">Gestion des tâches</h1>
 
    <!-- ==== FORMULAIRE AJOUT / MODIFICATION ==== -->
         <div class="card mb-4 col-md-6 offset-3">
