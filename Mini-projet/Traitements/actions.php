@@ -12,13 +12,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'modifier') {
     //on vérifie si les champs de modification ne sont pas vides
     if(empty($titre) || empty($description) || empty($date_limite) || empty($priorite))
     {
-        header("Location: ../index.php?page=indexTache&error=1");
+        header("Location: ../index.php?page=AddTasks&error=1");
         exit();
     }
     // on vérifie si la date limite n'est pas inférieure à la date d'aujourd'hui
     if($date_limite < date ('Y-m-d'))
     {
-        header("Location: ../index.php?page=indexTache&error=2");
+        header("Location: ../index.php?page=AddTasks&error=2");
         exit();
     }
     //Execution de la requête  
@@ -34,13 +34,13 @@ if(isset($_POST['action']) && $_POST['action']==='ajouter')
         extract($_POST);
         if(empty($titre) || empty($description) || empty($date_limite) || empty($priorite))
             {
-                header("Location: ../index.php?page=indexTache&error=1");
+                header("Location: ../index.php?page=AddTasks&error=1");
                 exit();
             }
         // on vérifie si la date limite n'est pas inférieure à la date d'aujourd'hui
         if($date_limite < date ('Y-m-d'))
             {
-                header("Location: ../index.php?page=indexTache&error=2");
+                header("Location: ../index.php?page=AddTasks&error=2");
                 exit();
             }
 
