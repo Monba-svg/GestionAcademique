@@ -58,7 +58,7 @@
                     </div>
 
                        <?php if ($tache_a_modifier): ?>
-                            <!-- STATUT : uniquement en modification -->
+                
                             <div class="mb-3">
                                 <label class="form-label">Statut</label>
                                 <select class="form-select" name="statut">

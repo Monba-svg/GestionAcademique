@@ -96,5 +96,4 @@ $taches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $json = "tache.json";
 file_put_contents($json, json_encode($taches, JSON_PRETTY_PRINT));
 
-
 ?>

@@ -4,7 +4,7 @@
         "titre": "Lecture",
         "description": "Lire manga",
         "priorite": "moyenne",
-        "statut": "\u00e0 faire",
+        "statut": "termin\u00e9e",
         "date_creation": "2026-02-03 01:12:20",
         "date_limite": "2026-02-03",
         "responsable": "Flutter"
@@ -24,9 +24,9 @@
         "titre": "Apprendre le react",
         "description": "Apprentissage",
         "priorite": "moyenne",
-        "statut": "\u00e0 faire",
+        "statut": "en cours",
         "date_creation": "2026-02-03 20:16:59",
         "date_limite": "2026-02-11",
-        "responsable": null
+        "responsable": "Awa"
     }
 ]

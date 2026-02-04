@@ -58,7 +58,7 @@
                         <?php endif; ?>
                         <td><?= $tache['date_limite'] ?></td>
                         <td>
-                            <?php if ($tache['date_limite'] < date('Y-m-d') || $tache['statut'] !== 'terminée'): ?>
+                            <?php if ($tache['statut'] !='terminée' ) : ?>
                                 <div class="alert alert-danger py-1 px-2">⚠ En retard</div>
                             <?php endif; ?>
                         </td>
