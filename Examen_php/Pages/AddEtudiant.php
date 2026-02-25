@@ -10,6 +10,10 @@
             <div class="alert alert-danger">
                 Cette classe n'existe pas encore !!
             </div>
+        <?php elseif ($_GET['error'] == 2): ?>
+            <div class="alert alert-danger">
+                Veuillez remplir tous les informations
+            </div>
         <?php endif; ?>
     <?php endif; ?>
     <div class="card-body">

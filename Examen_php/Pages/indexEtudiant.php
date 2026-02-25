@@ -72,6 +72,7 @@
             <th>#</th>
             <th>Nom</th>
             <th>prenom</th>
+            <th>Matricule</th>
             <th>Filiere</th>
             <th>Niveau</th>
             <th>Moyenne</th>
@@ -84,6 +85,7 @@
                 <td><?= $etu['id_etudiant'] ?></td>
                 <td><?= $etu['nom'] ?></td>
                 <td><?= $etu['prenom'] ?></td>
+                <td><?= $etu['matricule'] ?></td>
                 <td><?= $etu['id_classe'] ?></td>
                 <td><?= $etu['id_niveau'] ?></td>
                 <td><?php

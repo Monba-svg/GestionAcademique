@@ -36,7 +36,7 @@ require_once("Traitements/request.php");
 //********************GET Niveau****************************//
 
 $filieres = ["Génie Logiciel", "IAGE", "Cybersécurité", "Data-science", "Multimédia", "Réseaux", "Comptabilité", "Gestion"];
-
+$niv =['Licence 1','Licence 2','Licence 3','Master 1','Master 2'];
 //********************GET NOTE****************************//
                     
                     $note = getNote();

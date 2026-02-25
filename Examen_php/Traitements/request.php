@@ -55,11 +55,12 @@ function countEtudiant()
 }
 
 
-function addEtudiant($prenom, $nom, $id_classe, $id_niveau)
+function addEtudiant($prenom, $nom,$matricule, $id_classe, $id_niveau)
 {
     global $pdo;
-    $stmt = $pdo->prepare('INSERT INTO etudiant(prenom,nom,id_classe,id_niveau) VALUES (?,?,?,?)');
-    return $stmt->execute([$prenom, $nom, $id_classe, $id_niveau]);
+    $matricule=genererMatricule($prenom,$nom,$id_niveau,$id_classe);
+    $stmt = $pdo->prepare('INSERT INTO etudiant(prenom,nom,matricule,id_classe,id_niveau) VALUES (?,?,?,?,?)');
+    return $stmt->execute([$prenom, $nom,$matricule, $id_classe, $id_niveau]);
 }
 
 function addModule($nom_module, $id_classe, $id_niveau)
@@ -104,7 +105,7 @@ function getModule($id_classe, $id_niveau)
 function addEval($type_eval, $id_module, $note, $id_etudiant)
 {
     global $pdo;
-    $stmt = $pdo->prepare("INSERT INTO note(type,id_module,note,id_etudiant) values (?,?,?,?)");
+    $stmt = $pdo->prepare("INSERT INTO note(type_eval,id_module,note,id_etudiant) values (?,?,?,?)");
     return $stmt->execute([$type_eval, $id_module, $note, $id_etudiant]);
 }
 
@@ -142,7 +143,7 @@ function getAverage($id_etudiant, $id_classe, $id_niveau)
 {
     global $pdo;
     //Sans TP
-    $stmt = $pdo->prepare("SELECT SUM(n.note) AS moy FROM note n WHERE n.id_etudiant = ? AND n.type <> 'TP'");
+    $stmt = $pdo->prepare("SELECT SUM(n.note) AS moy FROM note n WHERE n.id_etudiant = ? AND n.type_eval <> 'TP'");
     $stmt->execute([$id_etudiant]);
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     //nimbre de module
@@ -162,7 +163,7 @@ function BestStudentByClasse($id_niveau, $id_classe)
     global $pdo;
     $stmt = $pdo->prepare("SELECT e.*,SUM(n.note) as total from etudiant e 
     JOiN note n on n.id_etudiant=e.id_etudiant
-    WHERE e.id_niveau=? and e.id_classe=? and n.id_etudiant=e.id_etudiant and n.type<>'TP'
+    WHERE e.id_niveau=? and e.id_classe=? and n.id_etudiant=e.id_etudiant and n.type_eval<>'TP'
     GROUP BY e.id_etudiant
     order by total desc limit 1  ");
     $stmt->execute([$id_niveau, $id_classe]);
@@ -170,6 +171,33 @@ function BestStudentByClasse($id_niveau, $id_classe)
     return $res ?: null;
 }
 
+function genererMatricule($prenom, $nom, $niveau, $filiere) {
+    global $pdo;
+
+    // 1. Licence 2 = L2
+    $codeNiveau = substr($niveau, 0, 1) . substr($niveau, -1); 
+
+    // 2. Génie Logiciel = GL
+    $mots = explode(' ', trim($filiere));
+    $codeFiliere = (count($mots) >= 2) 
+        ? strtoupper($mots[0][0] . $mots[1][0]) 
+        : strtoupper(substr($filiere, 0, 2));
+
+    $initiales = strtoupper($prenom[0] . $nom[0]);
+
+    $annee = date('Y');
+
+    // On cherche tous les matricules qui commencent par L2GL 
+    $recherche = $codeNiveau . $codeFiliere . "%_" . $annee . "_%";
+    
+    $query = $pdo->prepare("SELECT COUNT(*) FROM etudiant WHERE matricule LIKE ?");
+    $query->execute([$recherche]);
+    
+    // On récupère le nombre total d'étudiants déjà inscrits dans cette filière
+    $nb = $query->fetchColumn() + 1;
+    
+    return $codeNiveau . $codeFiliere . $initiales . "_" . $annee . "_" . $nb;
+}
 
 function getAverageClasse($id_niveau, $filiere)
 {
@@ -252,6 +280,7 @@ function genererBulletin()
         $pdf->Cell(0, 8, utf8_decode("Étudiant : " . $etu['prenom'] . " " . $etu['nom']), 0, 1);
         $pdf->Cell(0, 8, utf8_decode("Niveau : " . $id_niveau), 0, 1);
         $pdf->Cell(0, 8, utf8_decode("Classe : " . $id_classe), 0, 1);
+        $pdf->Cell(0, 8, utf8_decode("Matricule : " . $etu['matricule']), 0, 1);
         $pdf->Ln(10);
         //setfill permet de definir la couleur de fond de la cellule parametre RVB
         $pdf->SetFillColor(230, 230, 230);
@@ -276,7 +305,7 @@ function genererBulletin()
         //ob_get_length mesure la taille stocké en mémoire et ob clean vide la mémoire sans l'afficher
         if (ob_get_length()) ob_clean();
         //Output permet de compiler les instructions precedentes pour creer le fichier elle prend 4 parametre I pour etre rediriger vers une page en pdf D pour le faire download F pour enregistrer le fichier dans un serveur, S qui retourne le pdf en chaines de caractere
-        $pdf->Output('I', 'Bulletin_' . $etu['nom'] . '.pdf');
+        $pdf->Output('D', 'Bulletin_' . $etu['nom'] . '.pdf');
         exit();
     }
 }
@@ -320,12 +349,12 @@ function getBestStudentsByLevel()
 {
     global $pdo;
 
-    $sql = "SELECT e.id_etudiant, e.nom, e.prenom, e.id_niveau, e.id_classe, 
+    $sql = "SELECT e.id_etudiant, e.nom, e.prenom,e.matricule, e.id_niveau, e.id_classe, 
             SUM(n.note) as somme_notes,
             (SELECT COUNT(*) FROM module m WHERE m.id_classe = e.id_classe AND m.id_niveau = e.id_niveau) as total_modules
             FROM etudiant e
             JOIN note n ON e.id_etudiant = n.id_etudiant
-            WHERE n.type <> 'TP'
+            WHERE n.type_eval <> 'TP'
             GROUP BY e.id_etudiant
             ORDER BY e.id_niveau ASC, (SUM(n.note) / (SELECT COUNT(*) FROM module m WHERE m.id_classe = e.id_classe AND m.id_niveau = e.id_niveau)) DESC";
 
@@ -354,4 +383,11 @@ function GETALLMODULE()
     global $pdo;
     $stmt=$pdo->query("SELECT COUNT(*) as t from module");
     return $stmt->fetchColumn();
+}
+
+function addNiveau($niv)
+{
+    global $pdo;
+    $stmt=$pdo->prepare("Insert into niveau(id_niveau) values (?)");
+    return $stmt->execute([$niv]);
 }

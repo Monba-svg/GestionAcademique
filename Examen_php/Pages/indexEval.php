@@ -21,7 +21,7 @@
             <td><?= $not['prenom'] . " " . $not["nom"] ?></td>
             <td><?= $not['id_classe'] ?></td>
             <td><?= $not['nom_module'] ?></td>
-            <td><?= $not['type'] ?></td>
+            <td><?= $not['type_eval'] ?></td>
             <td><?= $not['note'] ?></td>
             <td><a href="index.php?page=Evaluation&note=<?= $not['id_note'] ?>&id=<?= $not['id_etudiant'] ?>"
                     class="btn btn-sm btn-outline-success">

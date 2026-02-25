@@ -31,8 +31,17 @@
             <div class="mb-3">
                 <label class="form-label">Type de l'évaluation</label>
                 <?php if ($note_a_modifier): ?>
-                    <input type="text" name="type_eval" value="<?= $note_a_modifier['type'] ?> " id=""
-                        placeholder="Type de l'eval" class="form-control">
+                    <select name="type_eval" id="" class="form-control" required>
+                        <option value="<?= $note_a_modifier['type_eval'] ?>" selected>
+                            <?= $note_a_modifier['type_eval'] ?>
+                        </option>
+
+                        <?php foreach ($type as $typ): ?>
+                            <?php if ($typ != $note_a_modifier['type_eval']): ?>
+                                <option value="<?= $typ ?>"><?= $typ ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
                 <?php else: ?>
                     <select name="type_eval" id="" class="form-control" required>
                         <option value="">Selectionnez le type du devoir</option>
@@ -40,7 +49,7 @@
                             <option value="<?= $typ ?>"><?= $typ ?></option>
                         <?php endforeach; ?>
                     </select>
-                <?php endif; ?>
+                <?php endif; ?> 
             </div>
 
             <div class="mb-3">

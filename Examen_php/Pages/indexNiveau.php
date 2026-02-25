@@ -24,6 +24,7 @@
     <tr>
         <th>#</th>
         <th>Nom</th>
+        <th>Matricule</th>
         <th>Niveau</th>
         <th>Classe</th>
         <th>Moyenne</th>
@@ -35,6 +36,7 @@
                 <?= $value['prenom'] . " " . $value['nom']  ?>
                 <i class="fas fa-crown"></i>
             </td>
+            <td><?= $value['matricule'] ?></td>
             <td><?= $value['id_niveau'] ?></td>
             <td><?= $value['id_classe'] ?></td>
             <td><?= $value['moyenne'] ?></td>
